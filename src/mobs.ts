@@ -46,7 +46,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export function loadMobNames(max = 24): string[] {
   const candidate = resolve(
     __dirname,
-    '../../showeq-daemon/tests/replay/combat.pbstream',
+    '../../scry-cpp/tests/replay/combat.pbstream',
   );
 
   const fromFile = existsSync(candidate) ? extractNames(candidate) : [];

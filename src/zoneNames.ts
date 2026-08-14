@@ -1,8 +1,8 @@
-// Generated from showeq-daemon/src/zones.h — short → long zone-name lookup.
+// Generated from scry-cpp/src/zones.h — short → long zone-name lookup.
 // The table covers every zone the daemon recognizes (~628 entries); the
 // demo only resolves names for short names that exist in maps/, but
 // shipping the full table keeps it useful for the opportunistic
-// ~/.showeq/maps loader path too.
+// ~/.scry/maps loader path too.
 
 export const ZONE_LONG_NAMES: Record<string, string> = {
   qeynos: 'South Qeynos',

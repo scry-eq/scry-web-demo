@@ -8,7 +8,7 @@ import {
 // One in-memory rule. Mirrors seq.v1.FilterRule on the wire but adds
 // the parsed regex + level range so we don't re-parse on every match.
 //
-// Pattern syntax (matches showeq-daemon's FilterItem, filter.cpp:92):
+// Pattern syntax (matches scry-cpp's FilterItem, filter.cpp:92):
 //   <regex>[;<minlevel>[-<maxlevel>]]
 //   - "skeleton"      → match any name containing "skeleton"
 //   - "skeleton;5"    → also require level == 5

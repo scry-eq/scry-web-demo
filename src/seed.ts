@@ -91,8 +91,8 @@ export function buildBuffs(playerId: number, playerName: string): Buff[] {
 
 // Sparse skill list — only learned skills, mirroring how the daemon
 // filters value=255 entries before sending. Skill ids match the
-// SKILL_* enum in showeq-daemon/src/skills.h (also vendored at
-// showeq-web/src/ui/skills.ts).
+// SKILL_* enum in scry-cpp/src/skills.h (also vendored at
+// scry-web/src/ui/skills.ts).
 export const PLAYER_SKILLS: { id: number; value: number }[] = [
   { id:  0, value: 145 }, // 1H Blunt
   { id:  1, value: 130 }, // 1H Slashing
@@ -192,7 +192,7 @@ export function summedTotals(): {
 }
 
 export function buildPrefs(): Pref[] {
-  // Section/key pairs match what showeq-web's PreferencesPanel reads
+  // Section/key pairs match what scry-web's PreferencesPanel reads
   // (Interface.DateTimeFormat, Network.Device, Network.IP). The demo
   // doesn't sniff a real interface, so Network.Device defaults to the
   // first entry of the simulated DevicesList.

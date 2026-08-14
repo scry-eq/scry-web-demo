@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "showeq-web-demo",
+      "name": "scry-web-demo",
       "dependencies": {
         "@bufbuild/protobuf": "^2.2.0",
       },

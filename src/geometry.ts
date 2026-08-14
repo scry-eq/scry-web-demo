@@ -11,14 +11,14 @@ import {
   type MapLocation,
 } from '@gen/seq/v1/events_pb';
 
-// Parses the SOE/Brewall .txt map format used by ~/.showeq/maps.
-// The format and coalescing rules mirror showeq-daemon's
+// Parses the SOE/Brewall .txt map format used by ~/.scry/maps.
+// The format and coalescing rules mirror scry-cpp's
 // MapData::loadSOEMap (mapcore.cpp:940). Specifically:
 //   - The file's raw X/Y axes are already in screen convention
 //     (+X right = East, +Y down = South). The daemon historically
 //     negated on load into its world (EQ runtime) convention, then
 //     re-negated at proto-serialization time to put coords back into
-//     screen convention on the wire (see showeq-daemon/src/protoencoder.cpp
+//     screen convention on the wire (see scry-cpp/src/protoencoder.cpp
 //     fillPos / fillMapGeometry, and the seq.v1 Pos message comment).
 //     The demo skips the round-trip — load → emit is identity, no
 //     negation. Z (height) is the same in both conventions and ships raw.
@@ -32,12 +32,12 @@ import {
 //
 // Real-game zones often have three layer files (`<zone>.txt`,
 // `<zone>_1.txt`, `<zone>_2.txt`). We assign them layers 0/1/2 and
-// merge into a single MapGeometry for the wire — the showeq-web
+// merge into a single MapGeometry for the wire — the scry-web
 // MapCanvas can already toggle individual layers.
 
 type Pt = { x: number; y: number; z: number };
 
-// Mirror of SEQMAP_COLOR_TABLE in showeq-daemon/src/mapcolors.h. The
+// Mirror of SEQMAP_COLOR_TABLE in scry-cpp/src/mapcolors.h. The
 // daemon's getMapConvertColor (mapcore.h:746) maps the file's raw rgb
 // to one of 64 named CSS colors, then emits the resolved color (in
 // QColor::name() hex form) on the wire. We replicate the same table
@@ -232,13 +232,13 @@ export interface LoadResult {
 }
 
 // Maps lookup uses a search path: the vendored `<repo>/maps/` dir
-// first (the curl-and-run experience), then `~/.showeq/maps/` if it
+// first (the curl-and-run experience), then `~/.scry/maps/` if it
 // exists (so a developer with a full local install gets the entire
 // 599-zone pool to randomize across without re-vendoring).
 export const VENDORED_MAPS_DIR =
   resolve(dirname(fileURLToPath(import.meta.url)), '..', 'maps');
 export const SYSTEM_MAPS_DIR =
-  resolve(process.env.HOME ?? '', '.showeq', 'maps');
+  resolve(process.env.HOME ?? '', '.scry', 'maps');
 
 // Scan one or more dirs for `<short>.txt` files and return the unique
 // set of short names. The scan runs once at server startup; the

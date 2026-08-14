@@ -66,7 +66,7 @@ const TICK_MS = 200;
 
 // Build the zone allowlist once at startup by scanning the two
 // candidate dirs (vendored maps/ and the developer-local
-// ~/.showeq/maps). The set returned here is the ONLY input that
+// ~/.scry/maps). The set returned here is the ONLY input that
 // `?m=<zone>` is validated against — exact-match short-name lookup, no
 // regex sanitization needed because filesystem-traversal characters
 // can't survive scanZoneShorts's `[a-z0-9_-]+\.txt$` filter.
@@ -74,7 +74,7 @@ const ZONE_ALLOWLIST = scanZoneShorts([VENDORED_MAPS_DIR, SYSTEM_MAPS_DIR]);
 if (ZONE_ALLOWLIST.size === 0) {
   console.error(
     `[demo] no zone .txt files found under ${VENDORED_MAPS_DIR} or ${SYSTEM_MAPS_DIR} — ` +
-    `vendor at least one zone or install legacy showeq maps.`,
+    `vendor at least one zone or populate the scry maps dir.`,
   );
   process.exit(1);
 }
@@ -91,7 +91,7 @@ const ZONE_RANDOM_POOL = ZONE_LIST.filter((z) => z in ZONE_LONG_NAMES);
 if (ZONE_RANDOM_POOL.length === 0) {
   console.error(
     `[demo] no canonical zones in allowlist — every map file is a fan-made ` +
-    `variant. Vendor at least one zone known to showeq-daemon's zones.h.`,
+    `variant. Vendor at least one zone known to scry-cpp's zones.h.`,
   );
   process.exit(1);
 }
@@ -345,7 +345,7 @@ function seedZoneEntities(
 
 // Swap the running session into a different random zone. Mirrors what
 // a zoning EQ client would see: ZoneChanged drops every spawn +
-// SpawnPoint on the showeq-web side; the follow-up SpawnAdded /
+// SpawnPoint on the scry-web side; the follow-up SpawnAdded /
 // SpawnPointAdded events repopulate. Static cross-zone state (group,
 // buffs, prefs, categories, items) is not re-sent — the client keeps
 // it.
@@ -375,7 +375,7 @@ function cycleZone(ws: WS, session: Session): void {
       geometry: next.loaded.geometry,
     }),
   }));
-  // Re-emit the player so the showeq-web store re-keys it after its
+  // Re-emit the player so the scry-web store re-keys it after its
   // post-zoneChanged spawns.clear(). Same Spawn object, just at the
   // new anchor.
   ws.send(envelope(session, {
@@ -665,7 +665,7 @@ function snapshotFlags(s: Session): Map<number, number> {
 // and emit a SpawnAdded for each spawn whose flags actually changed.
 // This mirrors the daemon's behavior in SessionAdapter::onChangeItem
 // (sessionadapter.cpp:507) which uses SpawnAdded — not SpawnUpdated —
-// for filter-flag mutations because the showeq-web store doesn't apply
+// for filter-flag mutations because the scry-web store doesn't apply
 // filter_flags from SpawnUpdated.
 function recomputeAndEmit(
   ws: WS, s: Session, prev: Map<number, number>,
@@ -729,18 +729,18 @@ const server = Bun.serve<WSData, never>({
     // requested short isn't on the list (or wasn't supplied).
     // `?spawncount=N` controls how many NPCs the session simulates
     // (default 14, capped at MAX_SPAWN_COUNT) — useful for poking at
-    // render perf in showeq-web.
+    // render perf in scry-web.
     const url = new URL(req.url);
     const picked = pickZone(url.searchParams.get('m'));
     const spawnCount = parseSpawnCount(url.searchParams.get('spawncount'));
     const cycleSeconds = parseCycleSeconds(url.searchParams.get('cycle'));
     if (srv.upgrade(req, { data: { ...picked, spawnCount, cycleSeconds } })) return;
-    return new Response('showeq-web-demo: WebSocket only', { status: 426 });
+    return new Response('scry-web-demo: WebSocket only', { status: 426 });
   },
   websocket: {
     open(_ws) {
       // Wait for Subscribe before streaming — matches the daemon's
-      // SessionAdapter contract; the showeq-web client sends it on open.
+      // SessionAdapter contract; the scry-web client sends it on open.
     },
     message(ws, data) {
       if (typeof data === 'string') return;
@@ -826,4 +826,4 @@ const server = Bun.serve<WSData, never>({
 });
 
 console.log(`[demo] listening on ws://localhost:${server.port}`);
-console.log('[demo] point showeq-web at this URL via Settings → Daemon URL');
+console.log('[demo] point scry-web at this URL via Settings → Daemon URL');
