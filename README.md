@@ -6,11 +6,12 @@ EQ packet capture. It:
 
 - Loads zone geometry from `maps/<zone>.txt` plus the `_1` / `_2`
   layer overlays (vendored next to the source), parsed using the
-  daemon's `loadSOEMap` rules (mapcore.cpp:940) — so you see the real
-  Brewall map a live session would render.
+  daemon's `loadSOEMap` rules (`scry-cpp/src/mapcore.cpp`) — so you see
+  the real Brewall map a live session would render.
 - Spawns a randomized PC plus ~14 NPCs at named map landmarks. NPC
-  names come from the local `tests/replay/combat.pbstream` golden if
-  present, or a curated pool otherwise.
+  names come from the `scry-cpp` sibling checkout's
+  `tests/replay/combat.pbstream` golden if present, or a curated pool
+  otherwise.
 - Walks the mobs around at 5 Hz and sprinkles in chat / combat events.
 
 Speaks the same `seq.v1` protobuf the daemon does — the scry-web
@@ -49,7 +50,7 @@ clamped to `1..5000`). Useful for poking at scry-web rendering perf
 (`decaying skeleton, a #042`) once the unique-name pool runs out.
 
 Append `&cycle=N` to control the auto zone-rotation interval in
-seconds (default 30; `cycle=0` disables). Each rotation emits a
+seconds (default 120; `cycle=0` disables). Each rotation emits a
 `ZoneChanged` envelope followed by fresh `SpawnAdded` /
 `SpawnPointAdded` events for the new zone — the same shape the daemon
 sends when the player actually zones.
@@ -70,3 +71,7 @@ Env vars:
 - `src/zoneNames.ts` — Generated short→long zone name map (from zones.h)
 - `src/smoke.ts`     — Self-contained client used to verify the server
 - `src/smoke-filters.ts` — Self-contained client exercising the filter-rule protocol
+
+## License
+
+MIT. See [LICENSE](LICENSE).
