@@ -65,6 +65,8 @@ Env vars:
 - `maps/`            — vendored zone geometry files (curated set)
 - `src/sim.ts`       — Mob & player movement step
 - `src/mobs.ts`      — NPC name pool + combat.pbstream extraction
+- `src/filters.ts`   — in-memory FilterRule engine (mirrors scry-cpp's `FilterItem` pattern syntax, `filter.cpp:92`) so the demo's filter panel behaves like a real daemon
 - `src/seed.ts`      — Static panel seed data (categories, group, items, …)
 - `src/zoneNames.ts` — Generated short→long zone name map (from zones.h)
 - `src/smoke.ts`     — Self-contained client used to verify the server
+- `src/smoke-filters.ts` — Self-contained client exercising the filter-rule protocol
